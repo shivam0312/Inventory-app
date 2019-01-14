@@ -1,0 +1,64 @@
+
+    <div class="row">
+      <div class="col-md-5">
+        <h2><i class="fa fa-users"></i> Products </h2>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-success btn-block" (click)="showRequests()"> Requests </button>
+    </div>
+      <div class="col-md-3">
+          <a routerLink="/add-product" href="#" class="btn btn-success btn-block"> Add New Product</a>
+      </div>
+    </div>
+    <table *ngIf="products?.length > 0;else noClients" class="table table-striped">
+      <thead class="thead-inverse">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Vendor</th>
+          <th>MRP</th>
+          <th>Quantity</th>
+          <th *ngIf="is_requests===false; else requests">Status</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="is_requests===false; else reqlist">
+        <ng-container *ngFor="let product of products">
+        <tr *ngIf="product.is_approved ===true;">
+          <td>{{product.id}}</td>
+          <td (click)="productClicked(product)">{{product.name}}</td>
+          <td>{{product.vendor}}</td>
+          <td>{{product.mrp}}</td>
+          <td>{{product.quantity}}</td>
+          <td *ngIf="product.is_approved === true;else requested" class="text-success"> Approved </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+    
+    <ng-template #requested>
+        <td class="text-danger"> Requested</td>
+    </ng-template>
+
+    <ng-template #reqlist>
+        <tbody>
+            <ng-container *ngFor="let product of products">
+            <tr *ngIf="product.is_approved ===false;">
+              <td>{{product.id}}</td>
+              <td (click)="productClicked(product)">{{product.name}}</td>
+              <td>{{product.vendor}}</td>
+              <td>{{product.mrp}}</td>
+              <td>{{product.quantity}}</td>
+              <button (click)="updateProduct()" class="btn btn-success"> Approve </button>
+            </tr>
+          </ng-container>
+          </tbody>
+    </ng-template>
+
+    <ng-template #requestes>
+        <th></th>
+    </ng-template>
+
+    <ng-template #noClients>
+      <hr>
+      <h5>There are no Products in the Inventory</h5>
+    </ng-template>
